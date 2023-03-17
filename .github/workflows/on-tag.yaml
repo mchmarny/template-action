@@ -11,15 +11,6 @@ jobs:
 
   conf:
     env:
-      # Update these based on the Setup output
-      IMG_NAME: s3cme
-      PROVIDER_ID: projects/510441318314/locations/global/workloadIdentityPools/s3cme-github-pool/providers/github-provider
-      REG_URI: us-west1-docker.pkg.dev/cloudy-s3c/s3cme
-      SA_EMAIL: s3cme-github-actions-user@cloudy-s3c.iam.gserviceaccount.com
-
-      # Defaults
-      BUILDER_VERSION: v1.4.0
-      COSIGN_VERSION: v1.13.1
       ERR_VULNERABILITY_SEV: "CRITICAL,HIGH,MEDIUM"
       GO_VERSION: "1.20.1"
 
@@ -27,27 +18,15 @@ jobs:
     permissions:
       contents: read
     outputs:
-      builder_version: ${{ steps.conf.outputs.builder_version }}
-      cosign_version: ${{ steps.conf.outputs.cosign_version }}
       err_on_vulnerability_sev: ${{ steps.conf.outputs.err_on_vulnerability_sev }}
       go_version: ${{ steps.conf.outputs.go_version }}
-      image_name: ${{ steps.conf.outputs.image_name }}
-      provider_id: ${{ steps.conf.outputs.provider_id }}
-      registry_uri: ${{ steps.conf.outputs.registry_uri }}
-      service_account: ${{ steps.conf.outputs.service_account }}
     steps:
 
     - name: Export Config
       id: conf
       run: |
-        echo "builder_version=${{ env.BUILDER_VERSION }}" >> $GITHUB_OUTPUT
-        echo "cosign_version=${{ env.COSIGN_VERSION }}" >> $GITHUB_OUTPUT
         echo "err_on_vulnerability_sev=${{ env.ERR_VULNERABILITY_SEV }}" >> $GITHUB_OUTPUT
         echo "go_version=${{ env.GO_VERSION }}" >> $GITHUB_OUTPUT
-        echo "image_name=${{ env.IMG_NAME }}" >> $GITHUB_OUTPUT
-        echo "provider_id=${{ env.PROVIDER_ID }}" >> $GITHUB_OUTPUT
-        echo "registry_uri=${{ env.REG_URI }}" >> $GITHUB_OUTPUT
-        echo "service_account=${{ env.SA_EMAIL }}" >> $GITHUB_OUTPUT
 
   test:
     needs:
@@ -71,12 +50,6 @@ jobs:
       id-token: write
       packages: write
     uses: ./.github/workflows/build.yaml
-    with:
-      auth_provider: ${{ needs.conf.outputs.provider_id }}
-      auth_user: ${{ needs.conf.outputs.service_account }}
-      go_version: ${{ needs.conf.outputs.go_version }}
-      image_name: ${{ needs.conf.outputs.image_name }}
-      image_repo: ${{ needs.conf.outputs.registry_uri }}
 
   sign:
     needs:
@@ -88,9 +61,6 @@ jobs:
       id-token: write
     uses: ./.github/workflows/sign.yaml
     with:
-      auth_provider: ${{ needs.conf.outputs.provider_id }}
-      auth_user: ${{ needs.conf.outputs.service_account }}
-      cosign_version: ${{ needs.conf.outputs.cosign_version }}
       image_digest: ${{ needs.build.outputs.digest }}
       scan_severity: ${{ needs.conf.outputs.err_on_vulnerability_sev }}
 
@@ -106,6 +76,4 @@ jobs:
       packages: write
     uses: ./.github/workflows/slsa.yaml
     with:
-      auth_provider: ${{ needs.conf.outputs.provider_id }}
-      auth_user: ${{ needs.conf.outputs.service_account }}
       image_digest: ${{ needs.build.outputs.digest }}

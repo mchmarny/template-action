@@ -1,24 +1,13 @@
-name: build_image
+name: build
 
 on:
   workflow_call:
     inputs:
-      image_repo:
-        description: 'Fully-qualified image repo (registry/project/repo)'
-        required: true
+      registry:
+        description: 'Image registry (e.g. gcr.io)'
         type: string
-      image_name:
-        description: 'Image name (e.g. my-image)'
-        required: true
-        type: string
-      auth_provider:
-        description: 'OIDC provider ID'
-        required: true
-        type: string
-      auth_user:
-        description: 'OIDC user ID'
-        required: true
-        type: string
+        required: false
+        default: 'ghcr.io'
       go_version:
         description: 'Go version to use'
         required: false
@@ -66,13 +55,12 @@ jobs:
         go mod tidy
         go mod vendor
 
-    - id: auth
-      name: Auth GCP
-      uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d  # v1.0.0
+    - name: Auth Docker
+      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
       with:
-        token_format: "access_token"
-        workload_identity_provider: ${{ inputs.auth_provider }}
-        service_account: ${{ inputs.auth_user }}
+        registry: ${{ inputs.registry }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install ko
       uses: ko-build/setup-ko@ace48d793556083a76f1e3e6068850c1f4a369aa  # v0.6
@@ -82,25 +70,21 @@ jobs:
         AUTH_TOKEN: ${{ steps.auth.outputs.access_token }}
       run: |
         set -euo pipefail
-        reg=$(echo ${{ inputs.image_repo }} | cut -d/ -f1)
-        echo "${AUTH_TOKEN}" | ko login ${reg} --username oauth2accesstoken --password-stdin
+        ko login "${{ inputs.registry }}/${{ github.repository }}"
 
     - name: Get Version
       run: |
         set -euo pipefail
         echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-    # Note: ko build image ref will include BOTH, the tag AND digest of the image.
-    # ThTechnically not well formed but most of the tools seem to parse it as digest.
     - name: Build Image
       id: image
       env:
-        KO_DOCKER_REPO: ${{ inputs.image_repo }}/${{ inputs.image_name }}
+        KO_DOCKER_REPO: "${{ inputs.registry }}/${{ github.repository }}"
         GOFLAGS: "-ldflags=-X=main.version=${{ env.RELEASE_VERSION }}"
+        KO_DEFAULTBASEIMAGE: cgr.dev/chainguard/static:latest
         COSIGN_EXPERIMENTAL: "true"
       run: |
         set -euo pipefail
         ko build cmd/server/main.go --image-refs .digest --bare --tags ${{ env.RELEASE_VERSION }}
-        IMG_URI=$(cat .digest)
-        echo "IMAGE_DIGEST=$IMG_URI" >> $GITHUB_ENV
-        echo "digest=$IMG_URI" >> "$GITHUB_OUTPUT"
+        echo "digest=$(cat .digest)" >> "$GITHUB_OUTPUT"
