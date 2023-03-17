@@ -58,7 +58,7 @@ build: tidy ## Builds CLI binary
 	-w -s -X main.commit=$(COMMIT) \
 	-w -s -X main.date=$(CURRENT_DATE) \
 	-extldflags '-static'" \
-    -race -o bin/action cmd/action/main.go
+    -race -a -o bin/action cmd/action/main.go
 
 .PHONY: tag
 tag: ## Creates release tag 
