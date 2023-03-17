@@ -53,6 +53,9 @@ jobs:
         hide-progress: true
         timeout: "10m"
         exit-code: "1"
+      env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ github.token }}
 
   sign:
     needs:
@@ -79,7 +82,7 @@ jobs:
       run: |
         set -euo pipefail
         cosign version
-        cosign login "${{ inputs.registry }}/${{ github.repository }}"
+        echo "${{ github.token }}" | cosign login ${{ inputs.registry }} --username "${{ github.actor }}" --password-stdin
 
     - name: Generate Keys
       run: |
@@ -105,6 +108,4 @@ jobs:
         COSIGN_EXPERIMENTAL: "true"
       run: |
         set -euo pipefail
-          cosign verify \
-          --key cosign.pub \
-          ${{ inputs.image_digest }}
+        cosign verify --key cosign.pub ${{ inputs.image_digest }}
