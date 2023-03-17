@@ -49,6 +49,8 @@ jobs:
       image: ${{ needs.conf.outputs.image }}
       digest: ${{ needs.conf.outputs.digest }}
       registry-username: ${{ github.actor }}
+    secrets:
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
 
   verify:
     needs:
