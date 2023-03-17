@@ -12,7 +12,7 @@ inputs:
 
 runs:
   using: docker
-  image: docker://ghcr.io/mchmarny/action:v0.0.16
+  image: docker://ghcr.io/mchmarny/action:v0.0.19
   args:
     - print
     - --file
