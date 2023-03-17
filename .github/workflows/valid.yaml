@@ -23,7 +23,7 @@ jobs:
       packages: read
     steps:
 
-    - uses: mchmarny/action@main  # tag it with a digest
+    - uses: mchmarny/action@v0.0.16
       with:
         project: ${{ inputs.target_project }}
         digest: ${{ inputs.image_digest }}

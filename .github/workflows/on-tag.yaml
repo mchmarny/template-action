@@ -67,9 +67,7 @@ jobs:
 
   slsa:
     needs:
-    - conf
     - build
-    - sign
     permissions:
       contents: read
       actions: read
