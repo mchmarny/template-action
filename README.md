@@ -123,7 +123,7 @@ The `payload` field (abbreviated) is the base64 encoded [in-toto statement](http
 
 ## action usage 
 
-Fow example on how to use the resulting actions in GitHub Actions see [.github/workflows/valid.yaml](../../.github/workflows/valid.yaml).
+Fow example on how to use the resulting actions in GitHub Actions see [.github/workflows/valid.yaml](.github/workflows/valid.yaml).
 
 ## disclaimer
 
