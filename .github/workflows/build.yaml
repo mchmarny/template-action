@@ -70,7 +70,7 @@ jobs:
         AUTH_TOKEN: ${{ steps.auth.outputs.access_token }}
       run: |
         set -euo pipefail
-        ko login "${{ inputs.registry }}/${{ github.repository }}"
+        echo "${{ github.token }}" | ko login ${{ inputs.registry }} --username "${{ github.actor }}" --password-stdin
 
     - name: Get Version
       run: |
