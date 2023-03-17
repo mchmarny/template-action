@@ -4,10 +4,8 @@ WIP: Template for GitHub Actions
 
 ## inputs
 
-* `project` - (required) GCP Project ID
-* `digest` - (required) Image digest
-* `file` - (required) Path to the vulnerability file
-* `format` - (required) Format of the vulnerability file
+* `file` - (required) File path
+* `required` - (optional) Whether required or ot
 
 
 ## usage
@@ -15,12 +13,12 @@ WIP: Template for GitHub Actions
 > Make sure to use the latest tag release (e.g. `v0.0.1`)
 
 ```yaml
-uses: mchmarny/action@v0.2.14
-with:
-  project: ${{ env.PROJECT_ID }}
-  digest: ${{ steps.build.outputs.digest }}
-  file: ${{ steps.scan.outputs.output }}
-  format: ${{ steps.scan.outputs.format }}
+- uses: mchmarny/action@v0.0.16
+  with:
+    project: ${{ inputs.target_project }}
+    digest: ${{ inputs.image_digest }}
+    file: ${{ inputs.report_path }}
+    format: trivy
 ```
 
 > Fully working example can be found in [.github/workflows/valid.yaml](../../.github/workflows/valid.yaml).

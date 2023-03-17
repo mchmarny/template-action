@@ -25,7 +25,5 @@ jobs:
 
     - uses: mchmarny/action@v0.0.16
       with:
-        project: ${{ inputs.target_project }}
-        digest: ${{ inputs.image_digest }}
-        file: ${{ inputs.report_path }}
-        format: trivy
+        file: ${{ inputs.file }}
+        required: ${{ inputs.required }}

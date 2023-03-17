@@ -14,6 +14,7 @@ var (
 		Action:  execRunCmd,
 		Flags: []c.Flag{
 			fileFlag,
+			requiredFlag,
 		},
 	}
 )

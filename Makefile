@@ -39,11 +39,11 @@ cover: test ## Runs unit tests and putputs coverage
 	go tool cover -func=cover.out
 
 .PHONY: lint
-lint: lint-go lint-yaml ## Lints the entire project 
+lint: lint-go lint-yaml ## Lints the entire repo 
 	@echo "Completed Go and YAML lints"
 
 .PHONY: lint
-lint-go: ## Lints the entire project using go 
+lint-go: ## Lints the entire repo using go 
 	golangci-lint run -c .golangci.yaml
 
 .PHONY: lint-yaml
