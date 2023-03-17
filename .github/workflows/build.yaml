@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       registry:
-        description: 'Image registry (e.g. gcr.io)'
+        description: 'Image registry (e.g. ghcr.io)'
         type: string
         required: false
         default: 'ghcr.io'
@@ -88,5 +88,5 @@ jobs:
         CGO_ENABLED: "0"
       run: |
         set -euo pipefail
-        ko build cmd/action/main.go --image-refs .digest --bare --tags ${{ env.RELEASE_VERSION }}
+        ko build cmd/action/main.go --image-refs .digest --bare --tags ${{ env.RELEASE_VERSION }},latest
         echo "digest=$(cat .digest)" >> "$GITHUB_OUTPUT"
