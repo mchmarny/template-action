@@ -54,11 +54,10 @@ lint-yaml: ## Runs yamllint on all yaml files (brew install yamllint)
 build: tidy ## Builds CLI binary
 	mkdir -p ./bin
 	CGO_ENABLED=0 go build -trimpath -ldflags="\
-    -w -s -X main.version=$(RELEASE_VERSION) \
-	-w -s -X main.commit=$(COMMIT) \
-	-w -s -X main.date=$(CURRENT_DATE) \
-	-extldflags '-static'" \
-    -race -a -o bin/action cmd/action/main.go
+		-w -s -X main.version=$(RELEASE_VERSION) \
+		-w -s -X main.commit=$(COMMIT) \
+		-w -s -X main.date=$(CURRENT_DATE) \
+		-extldflags '-static'" -o bin/action cmd/action/main.go
 
 .PHONY: tag
 tag: ## Creates release tag 
