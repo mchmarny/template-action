@@ -83,6 +83,7 @@ jobs:
     needs:
     - build
     permissions:
+      contents: read
       actions: read
       packages: read
     uses: ./.github/workflows/valid.yaml
