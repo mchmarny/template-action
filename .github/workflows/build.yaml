@@ -28,6 +28,7 @@ jobs:
     permissions:
       actions: read
       id-token: write
+      packages: write
     steps:
 
     - name: Setup Go
@@ -81,7 +82,7 @@ jobs:
       id: image
       env:
         KO_DOCKER_REPO: "${{ inputs.registry }}/${{ github.repository }}"
-        GOFLAGS: "-trimpath -ldflags=-X=main.version=${{ env.RELEASE_VERSION }}"
+        GOFLAGS: "-trimpath -race -ldflags=-X=main.version=${{ env.RELEASE_VERSION }}"
         KO_DEFAULTBASEIMAGE: "cgr.dev/chainguard/static:latest"
         COSIGN_EXPERIMENTAL: "true"
         CGO_ENABLED: "0"
