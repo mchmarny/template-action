@@ -54,8 +54,8 @@ jobs:
         timeout: "10m"
         exit-code: "1"
       env:
-          TRIVY_USERNAME: ${{ github.actor }}
-          TRIVY_PASSWORD: ${{ github.token }}
+        TRIVY_USERNAME: ${{ github.actor }}
+        TRIVY_PASSWORD: ${{ github.token }}
 
   sign:
     needs:
