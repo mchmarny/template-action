@@ -12,7 +12,7 @@ inputs:
 
 runs:
   using: docker
-  image: docker://ghcr.io/mchmarny/action:v0.0.19
+  image: docker://ghcr.io/mchmarny/action:latest  # pinned to digest in real use
   args:
     - print
     - --file
