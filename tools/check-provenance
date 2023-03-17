@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+
+image=$1
+
+if [ -z ${image+x} ]; then echo "image is unset"; fi
+
+repo=$(git config --get remote.origin.url | cut -d: -f2 | cut -d. -f1)
+registry=$(echo $image | cut -d/ -f1)
+version=$(cat .version)
+provenance="provenance.json"
+
+gh -R "$repo" release download "$version" -p "$provenance"
+
+slsa-verifier verify-image $image \
+    --provenance-path $provenance \
+    --source-uri "$repo" \
+    --source-tag "$version"
