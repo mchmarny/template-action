@@ -4,7 +4,7 @@ Template repo for GitHub Actions.
 
 ## template 
 
-Use this template to create a new repo (click the green button and follow the wizard). When done, clone your new repo locally, and navigate into it
+To create a new repo, click the green `Use this Template` button and follow the wizard. When done, clone your new repo locally, and navigate into it:
 
 ```shell
 git clone git@github.com:$GIT_HUB_USERNAME/$REPO_NAME.git
@@ -51,9 +51,9 @@ When successfully completed, that pipeline will create an image. Navigate to the
 
 https://github.com/YOUR-USERNAME-OR-ORG/action/pkgs/container/action
 
-The image is the line item tagged with version (e.g. `v0.0.20`). The other two OCI artifacts named with the image digest in the registry are signature (`.sig`) and attestation (`.att`).
+The image is the line item tagged with version (e.g. `v0.0.1`). The other two OCI artifacts named with the image digest in the registry are signature (`.sig`) and attestation (`.att`).
 
-You can now take the image digest and query sigstore transparency service (Rekor). Easiest way to do that is to use the Chainguard's [rekor-search-ui](https://github.com/chainguard-dev/rekor-search-ui). Here is the entry for [v0.0.20](https://rekor.tlog.dev/?hash=sha256:54c4d185322c87d05835f2f9ac72526ee5ada36a6145993adf87bd9c271334f5).
+You can now take the image digest and query sigstore transparency service (Rekor). Easiest way to do that is to use the Chainguard's [rekor-search-ui](https://github.com/chainguard-dev/rekor-search-ui). Here is the entry for [v0.0.1](https://rekor.tlog.dev/?hash=sha256:54c4d185322c87d05835f2f9ac72526ee5ada36a6145993adf87bd9c271334f5).
 
 #### provenance verification  
 
@@ -85,7 +85,7 @@ GitHub Workflow Trigger: push
 GitHub Workflow SHA: 45e3420e89478ccd0ffd97b8ee209eb5a5c59c69
 GitHub Workflow Name: on_tag
 GitHub Workflow Trigger mchmarny/action
-GitHub Workflow Ref: refs/tags/v0.0.21
+GitHub Workflow Ref: refs/tags/v0.0.1
 ```
 
 The output will also include JSON, which looks something like this (`payload` abbreviated): 
