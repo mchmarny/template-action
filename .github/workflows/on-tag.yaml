@@ -78,3 +78,14 @@ jobs:
     uses: ./.github/workflows/slsa.yaml
     with:
       image_digest: ${{ needs.build.outputs.digest }}
+
+  valid:
+    needs:
+    - build
+    permissions:
+      contents: read
+      packages: read
+    uses: ./.github/workflows/valid.yaml
+    with:
+      file: ${{ needs.build.outputs.digest }}
+      required: false

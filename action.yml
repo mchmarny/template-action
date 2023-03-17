@@ -1,34 +1,24 @@
 # action.yml
 name: action
-description: 'Import vulnerabilities to Google Container Analysis'
+description: 'Simple action demo'
 
 inputs:
-  project:
-    description: GCP Project ID'
-    required: true
-  digest:
-    description: 'Image digest'
-    required: true
   file:
-    description: 'Path to the vulnerability file'
+    description: 'File path'
     required: true
-  format:
-    description: 'Format of the vulnerability file'
-    required: true
+  required:
+    description: 'Whether or not it is required'
+    required: false
 
 runs:
   using: docker
-  image: docker://us-west1-docker.pkg.dev/cloudy-build/action/action:latest
+  image: docker://ghcr.io/mchmarny/action:v0.0.11
   args:
-    - import
-    - --project
-    - ${{ inputs.project }}
-    - --source
-    - ${{ inputs.digest }}
+    - print
     - --file
     - ${{ inputs.file }}
-    - --format
-    - ${{ inputs.format }}
+    - --required
+    - ${{ inputs.required }}
 
 branding:
   icon: arrow-up

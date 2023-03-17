@@ -1,0 +1,32 @@
+name: import-vulnerabilities
+
+on:
+  workflow_call:
+    inputs:
+      file:
+        description: 'File path'
+        required: true
+        type: string
+      required:
+        description: 'Whether or not it is required'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      id-token: write
+      packages: read
+    steps:
+
+    - uses: mchmarny/action@main  # tag it with a digest
+      with:
+        project: ${{ inputs.target_project }}
+        digest: ${{ inputs.image_digest }}
+        file: ${{ inputs.report_path }}
+        format: trivy

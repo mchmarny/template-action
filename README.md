@@ -23,7 +23,7 @@ with:
   format: ${{ steps.scan.outputs.format }}
 ```
 
-> Fully working example can be found in [.github/workflows/validate.yaml](../../.github/workflows/validate.yaml).
+> Fully working example can be found in [.github/workflows/valid.yaml](../../.github/workflows/valid.yaml).
 
 
 ## Disclaimer
