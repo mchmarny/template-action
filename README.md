@@ -74,7 +74,7 @@ COSIGN_EXPERIMENTAL=1 cosign verify-attestation \
 The terminal output will include the checks that were executed as part of the validation, as well as information about the subject (URI of the tag ref that triggered that workflow), with its SHA, name, and Ref.
 
 ```shell
-Verification for ghcr.io/mchmarny/actions/action@sha256:54c4d185322c87d05835f2f9ac72526ee5ada36a6145993adf87bd9c271334f5 --
+Verification for ghcr.io/mchmarny/action@sha256:54c4d185322c87d05835f2f9ac72526ee5ada36a6145993adf87bd9c271334f5 --
 The following checks were performed on each of these signatures:
   - The cosign claims were validated
   - Existence of the claims in the transparency log was verified offline

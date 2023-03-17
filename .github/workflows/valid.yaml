@@ -23,7 +23,7 @@ jobs:
       packages: read
     steps:
 
-    - uses: mchmarny/actions/action.yml@main  # pinned to digest in real use
+    - uses: mchmarny/action.yml@main  # pinned to digest in real use
       with:
         file: ${{ inputs.file }}
         required: ${{ inputs.required }}
