@@ -41,7 +41,7 @@ git push origin $VERSION
 
 #### monitor the pipeline 
 
-Navigate to `https://github.com/YOUR-USERNAME-OR-ORG/actions` in your repo to see the status of that release pipeline. Wait until all steps (aka jobs) have completed (green). 
+Navigate to `/actions` in your repo to see the status of that release pipeline. Wait until all steps (aka jobs) have completed (green). 
 
 > If any steps fail, click on them to see the cause. Fix it, commit/push changes to the repo, and tag a new release to re-trigger the pipeline again.
 
