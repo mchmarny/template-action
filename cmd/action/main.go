@@ -39,9 +39,6 @@ func main() {
 		a.Fatalf("error: %s", err)
 	}
 
-	// add content to the output
-	a.AddStepSummary(res.String())
-
 	// set output
 	a.SetOutput("output", res.Value)
 	a.SetOutput("processed_on", res.ProcessedOnUTC())
