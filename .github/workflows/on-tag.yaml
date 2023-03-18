@@ -82,7 +82,7 @@ jobs:
     - build
     permissions:
       contents: write
-      actions: read
+      actions: write
       packages: read
     uses: ./.github/workflows/valid.yaml
     with:
