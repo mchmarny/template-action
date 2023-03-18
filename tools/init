@@ -10,12 +10,17 @@ set -euo pipefail
 repo=$(git config --get remote.origin.url | cut -d: -f2 | cut -d. -f1)
 name=$(echo $repo | cut -d/ -f2)
 
-# update all references to the upstream repo
-grep -RiIl --exclude=README.md --exclude-dir={.git,sample,tools} 'mchmarny/template-action' |
+# change the name of the command dir
+mv cmd/template-action "cmd/${name}"
+
+# update all references to the upstream repo name
+grep -RiIl --exclude-dir={.git,tools} 'cmd/template-action' |
+  xargs sed -i '' "s!cmd/template-action!${name}!g"
+
+# update all references to the upstream org/repo name
+grep -RiIl --exclude-dir={.git,tools} 'mchmarny/template-action' |
   xargs sed -i '' "s!mchmarny/template-action!${repo}!g"
 
 # reset the version
 echo "v0.0.1" > .version
 
-# change the name of the command 
-mv cmd/template-action "cmd/${name}"
