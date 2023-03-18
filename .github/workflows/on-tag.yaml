@@ -81,9 +81,7 @@ jobs:
     needs:
     - build
     permissions:
-      contents: write
-      actions: write
-      packages: read
+      contents: read
     uses: ./.github/workflows/valid.yaml
     with:
       file: ${{ needs.build.outputs.digest }}

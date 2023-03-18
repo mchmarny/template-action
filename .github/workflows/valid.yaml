@@ -24,8 +24,7 @@ jobs:
   valid:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      actions: write
+      contents: read
     outputs:
       output: ${{ steps.validation.outputs.output }}
       processed_on: ${{ steps.validation.outputs.processed_on }}
