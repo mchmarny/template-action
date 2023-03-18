@@ -35,7 +35,7 @@ jobs:
       uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f  # v3.4.0
 
     - name: Auth Docker
-      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a  # v2.1.0
       with:
         registry: ${{ inputs.registry }}
         username: ${{ github.actor }}
@@ -49,7 +49,7 @@ jobs:
 
     - name: Extract Metadata
       id: meta
-      uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96
+      uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96  # v4.3.0
       with:
         images: ${{ env.IMG_URI }}
         tags: |
@@ -58,7 +58,7 @@ jobs:
 
     - name: BuildPush Image
       id: build
-      uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+      uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671  # v4.0.0
       with:
         context: .
         push: true
