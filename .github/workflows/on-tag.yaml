@@ -88,3 +88,15 @@ jobs:
     with:
       file: ${{ needs.build.outputs.digest }}
       required: false
+
+  print:
+    needs:
+    - valid
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - name: Print Output
+      run: |
+        echo "output: ${{ needs.valid.outputs.output }}"
+        echo "processed_on: ${{ needs.valid.outputs.processed_on }}"

@@ -2,41 +2,28 @@ package action
 
 import (
 	"context"
-	"fmt"
+	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rs/zerolog/log"
 )
 
 var (
 	ErrMissingOptionValue = errors.New("value required")
 )
 
-type Options struct {
-	File     string
-	Required bool
-}
-
-func (o *Options) Validate() error {
-	if o.File == "" {
-		return ErrMissingOptionValue
+// Execute runs the action. Do all the work here.
+func Execute(ctx context.Context, req *Request) (*Response, error) {
+	if req == nil {
+		return nil, errors.New("request required")
 	}
-	return nil
-}
-
-func (o *Options) String() string {
-	return fmt.Sprintf("File: %s, Verbose: %t", o.File, o.Required)
-}
-
-func Execute(ctx context.Context, opt *Options) error {
-	if opt == nil {
-		return errors.New("options required")
-	}
-	if err := opt.Validate(); err != nil {
-		return errors.Wrap(err, "error validating options")
+	if err := req.Validate(); err != nil {
+		return nil, errors.Wrap(err, "error validating options")
 	}
 
-	log.Debug().Msgf("Options: %s", opt.String())
+	res := &Response{
+		Value:       req.File,
+		ProcessedOn: time.Now().UTC(),
+	}
 
-	return nil
+	return res, nil
 }

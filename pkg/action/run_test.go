@@ -8,12 +8,13 @@ import (
 )
 
 func TestExecute(t *testing.T) {
-	err := Execute(context.TODO(), nil)
+	_, err := Execute(context.TODO(), nil)
 	assert.Error(t, err)
-	err = Execute(context.TODO(), &Options{})
+	_, err = Execute(context.TODO(), &Request{})
 	assert.Error(t, err)
-	err = Execute(context.TODO(), &Options{
+	res, err := Execute(context.TODO(), &Request{
 		File: "test",
 	})
 	assert.NoError(t, err)
+	assert.NotNil(t, res)
 }

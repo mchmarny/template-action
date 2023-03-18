@@ -11,6 +11,11 @@ on:
         description: 'Whether or not it is required'
         type: boolean
         default: false
+    outputs:
+      output:
+        value: ${{ jobs.validation.outputs.output }}
+      processed_on:
+        value: ${{ jobs.validation.outputs.processed_on }}
 
 permissions:
   contents: read
@@ -21,9 +26,13 @@ jobs:
     permissions:
       actions: read
       packages: read
+    outputs:
+      output: ${{ steps.validation.outputs.output }}
+      processed_on: ${{ steps.validation.outputs.processed_on }}
     steps:
 
-    - uses: mchmarny/action@main  # pinned to digest in real use
+    - id: validation
+      uses: mchmarny/action@main  # pinned to digest in real use
       with:
         file: ${{ inputs.file }}
         required: ${{ inputs.required }}
