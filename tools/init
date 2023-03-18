@@ -13,14 +13,12 @@ name=$(echo $repo | cut -d/ -f2)
 # change the name of the command dir
 mv cmd/template-action "cmd/${name}"
 
-# update all references to the upstream repo name
-grep -RiIl --exclude-dir={.git,tools} 'cmd/template-action' |
-  xargs sed -i '' "s!cmd/template-action!${name}!g"
-
 # update all references to the upstream org/repo name
 grep -RiIl --exclude-dir={.git,tools} 'mchmarny/template-action' |
   xargs sed -i '' "s!mchmarny/template-action!${repo}!g"
 
+# update all all other references to the upstream repo name
+sed -i '' "s/template-action/${name}/g" README.md
+
 # reset the version
 echo "v0.0.1" > .version
-
