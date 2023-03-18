@@ -4,16 +4,16 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/net/context"
 )
 
 func TestExecute(t *testing.T) {
-	err := Execute(context.TODO(), nil)
+	_, err := Execute(nil)
 	assert.Error(t, err)
-	err = Execute(context.TODO(), &Options{})
+	_, err = Execute(&Request{})
 	assert.Error(t, err)
-	err = Execute(context.TODO(), &Options{
+	res, err := Execute(&Request{
 		File: "test",
 	})
 	assert.NoError(t, err)
+	assert.NotNil(t, res)
 }

@@ -11,19 +11,30 @@ on:
         description: 'Whether or not it is required'
         type: boolean
         default: false
+    outputs:
+      output:
+        value: ${{ jobs.valid.outputs.output }}
+      processed_on:
+        value: ${{ jobs.valid.outputs.processed_on }}
 
 permissions:
   contents: read
 
 jobs:
-  import:
+  valid:
     runs-on: ubuntu-latest
     permissions:
-      actions: read
-      packages: read
+      contents: read
+    outputs:
+      output: ${{ steps.validation.outputs.output }}
+      processed_on: ${{ steps.validation.outputs.processed_on }}
     steps:
 
-    - uses: mchmarny/action@main  # pinned to digest in real use
+    - name: Checkout Code
+      uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f  # v3.4.0
+
+    - id: validation
+      uses: mchmarny/action@main  # pinned to digest in real use
       with:
         file: ${{ inputs.file }}
         required: ${{ inputs.required }}

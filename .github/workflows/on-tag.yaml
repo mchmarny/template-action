@@ -82,9 +82,19 @@ jobs:
     - build
     permissions:
       contents: read
-      actions: read
-      packages: read
     uses: ./.github/workflows/valid.yaml
     with:
       file: ${{ needs.build.outputs.digest }}
       required: false
+
+  print:
+    needs:
+    - valid
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - name: Print Output
+      run: |
+        echo "output: ${{ needs.valid.outputs.output }}"
+        echo "processed_on: ${{ needs.valid.outputs.processed_on }}"

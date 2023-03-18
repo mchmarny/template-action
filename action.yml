@@ -1,7 +1,9 @@
-# action.yml
-name: action
+name: demo-action
 description: 'Simple action demo'
-
+author: mchmarny
+branding:
+  icon: arrow-up
+  color: gray-dark
 inputs:
   file:
     description: 'File path'
@@ -9,17 +11,13 @@ inputs:
   required:
     description: 'Whether or not it is required'
     required: false
+    default: "false"
+outputs:
+  output:
+    description: 'The main output of this action'
+  processed_on:
+    description: 'The time when this action was processed'
 
 runs:
   using: docker
   image: docker://ghcr.io/mchmarny/action:latest  # pinned to digest in real use
-  args:
-    - print
-    - --file
-    - ${{ inputs.file }}
-    - --required
-    - ${{ inputs.required }}
-
-branding:
-  icon: arrow-up
-  color: gray-dark
