@@ -1,6 +1,6 @@
 # template-action
 
-Template repo for creating new GitHub Actions using Go. It includes: 
+Template repo for creating new GitHub Actions using Go. Bootstraps fully functional action so you can focus on writing the code. Includes: 
 
 * PR Qualification (on-push to the repo)
   * Go and YAML linting 
