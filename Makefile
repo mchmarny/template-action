@@ -57,7 +57,7 @@ build: tidy ## Builds CLI binary
 		-w -s -X main.version=$(RELEASE_VERSION) \
 		-w -s -X main.commit=$(COMMIT) \
 		-w -s -X main.date=$(CURRENT_DATE) \
-		-extldflags '-static'" -o bin/action cmd/action/main.go
+		-extldflags '-static'" -o bin/action cmd/template-action/main.go
 
 .PHONY: tag
 tag: ## Creates release tag 

@@ -1,5 +1,5 @@
 name: demo-action
-description: 'Simple action demo'
+description: 'Demo action'
 author: mchmarny
 branding:
   icon: arrow-up
@@ -20,4 +20,4 @@ outputs:
 
 runs:
   using: docker
-  image: docker://ghcr.io/mchmarny/action:latest  # pinned to digest in real use
+  image: docker://ghcr.io/mchmarny/template-action:latest  # pinned to digest in real use
