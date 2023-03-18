@@ -2,6 +2,7 @@ RELEASE_VERSION :=$(shell cat .version)
 COMMIT          :=$(shell git rev-parse HEAD)
 YAML_FILES      :=$(shell find . -type f -regex ".*yaml" -print)
 CURRENT_DATE	:=$(shell date '+%Y-%m-%dT%H:%M:%SZ')
+REPO            :=$(shell git config --get remote.origin.url | cut -d: -f2 | cut -d. -f1)
 
 ## Variable assertions
 ifndef RELEASE_VERSION
@@ -58,6 +59,13 @@ build: tidy ## Builds CLI binary
 		-w -s -X main.commit=$(COMMIT) \
 		-w -s -X main.date=$(CURRENT_DATE) \
 		-extldflags '-static'" -o bin/action cmd/template-action/main.go
+
+.PHONY: image
+image: tidy ## Builds Docker image
+	docker build \
+		-t ghcr.io/$(REPO):$(RELEASE_VERSION) \
+		-f cmd/template-action/Dockerfile \
+		.
 
 .PHONY: tag
 tag: ## Creates release tag 
