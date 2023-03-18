@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"strconv"
 	"time"
 
@@ -35,7 +34,7 @@ func main() {
 	}
 
 	// execute action with the request
-	res, err := action.Execute(context.Background(), req)
+	res, err := action.Execute(req)
 	if err != nil {
 		a.Fatalf("error: %s", err)
 	}

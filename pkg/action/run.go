@@ -1,7 +1,6 @@
 package action
 
 import (
-	"context"
 	"time"
 
 	"github.com/pkg/errors"
@@ -12,7 +11,7 @@ var (
 )
 
 // Execute runs the action. Do all the work here.
-func Execute(ctx context.Context, req *Request) (*Response, error) {
+func Execute(req *Request) (*Response, error) {
 	if req == nil {
 		return nil, errors.New("request required")
 	}
