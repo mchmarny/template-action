@@ -1,4 +1,4 @@
-module github.com/mchmarny/action
+module github.com/mchmarny/template-action
 
 go 1.20
 

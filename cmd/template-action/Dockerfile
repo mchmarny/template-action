@@ -3,7 +3,7 @@ WORKDIR /src/
 COPY . /src/
 ARG VERSION
 ENV VERSION ${VERSION}
-RUN CGO_ENABLED=0 go build -trimpath -ldflags="\
+RUN CGO_ENABLED=0 go build -a -trimpath -ldflags="\
     -w -s -X main.version=$VERSION \
 	-extldflags '-static'" \
     -mod vendor -o app cmd/template-action/main.go

@@ -53,7 +53,7 @@ lint-yaml: ## Runs yamllint on all yaml files (brew install yamllint)
 .PHONY: build
 build: tidy ## Builds CLI binary
 	mkdir -p ./bin
-	CGO_ENABLED=0 go build -trimpath -ldflags="\
+	CGO_ENABLED=0 go build -a -trimpath -ldflags="\
 		-w -s -X main.version=$(RELEASE_VERSION) \
 		-w -s -X main.commit=$(COMMIT) \
 		-w -s -X main.date=$(CURRENT_DATE) \
