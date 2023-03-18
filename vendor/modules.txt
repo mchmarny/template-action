@@ -7,7 +7,7 @@ github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 ## explicit
 github.com/pmezard/go-difflib/difflib
-# github.com/sethvargo/go-envconfig v0.8.0
+# github.com/sethvargo/go-envconfig v0.9.0
 ## explicit; go 1.17
 github.com/sethvargo/go-envconfig
 # github.com/sethvargo/go-githubactions v1.1.0
@@ -16,9 +16,6 @@ github.com/sethvargo/go-githubactions
 # github.com/stretchr/testify v1.8.2
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
-# golang.org/x/net v0.8.0
-## explicit; go 1.17
-golang.org/x/net/context
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3

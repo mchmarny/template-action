@@ -94,7 +94,7 @@ jobs:
     - valid
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
     steps:
     - name: Print Output
       run: |

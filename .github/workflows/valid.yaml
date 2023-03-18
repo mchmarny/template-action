@@ -13,19 +13,18 @@ on:
         default: false
     outputs:
       output:
-        value: ${{ jobs.validation.outputs.output }}
+        value: ${{ jobs.valid.outputs.output }}
       processed_on:
-        value: ${{ jobs.validation.outputs.processed_on }}
+        value: ${{ jobs.valid.outputs.processed_on }}
 
 permissions:
   contents: read
 
 jobs:
-  import:
+  valid:
     runs-on: ubuntu-latest
     permissions:
-      actions: read
-      packages: read
+      contents: write
     outputs:
       output: ${{ steps.validation.outputs.output }}
       processed_on: ${{ steps.validation.outputs.processed_on }}
