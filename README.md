@@ -1,8 +1,23 @@
 # template-action
 
-Template repo for GitHub Actions.
+Template repo for creating new GitHub Actions using Go. It includes: 
 
-## template 
+* PR Qualification (on-push to the repo)
+  * Go and YAML linting 
+  * Static code analysis and vulnerability scanning
+  * Unit test
+* Release (on git tag in the repo)
+  * All PR qualification test
+  * Image build (scratch + single binary)
+  * Image SBOM generation and attestation signing
+  * SLSA provenance generation and validation 
+  * Integration test in GitHub Actions action
+* Repo hygiene 
+  * Go, GitHub Actions, and Docker dependabot update configuration 
+  * Scorecards analysis with in-repo Sarif report
+  * Code test coverage report 
+
+## template usage
 
 To create a new repo, click the green `Use this Template` button and follow the wizard. When done, clone your new repo locally, and navigate into it:
 
