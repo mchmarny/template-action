@@ -81,7 +81,7 @@ jobs:
     needs:
     - build
     permissions:
-      contents: read
+      contents: write
       actions: read
       packages: read
     uses: ./.github/workflows/valid.yaml
@@ -94,7 +94,7 @@ jobs:
     - valid
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
     - name: Print Output
       run: |
