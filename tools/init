@@ -11,14 +11,13 @@ repo=$(git config --get remote.origin.url | cut -d: -f2 | cut -d. -f1)
 name=$(echo $repo | cut -d/ -f2)
 
 # change the name of the command dir
-mv cmd/template-action "cmd/${name}"
+# mv cmd/template-action "cmd/${name}"
 
 # update all references to the upstream org/repo name
-grep -RiIl --exclude-dir={.git,tools} 'mchmarny/template-action' |
-  xargs sed -i '' "s!mchmarny/template-action!${repo}!g"
-
-# update all all other references to the upstream repo name
-sed -i '' "s/template-action/${name}/g" README.md
+grep -RiIl --exclude-dir={.git,tools} 'template-action' |
+  xargs sed -i '' \
+    -e  "s!mchmarny/template-action!${repo}!g" \
+    -e "s/template-action/${name}/g"
 
 # reset the version
 echo "v0.0.1" > .version
