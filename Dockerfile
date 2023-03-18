@@ -1,0 +1,17 @@
+FROM golang:buster AS builder
+WORKDIR /src/
+COPY . /src/
+ARG VERSION
+ENV VERSION ${VERSION}
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="\
+    -w -s -X main.version=$VERSION \
+	-extldflags '-static'" \
+    -mod vendor -o app cmd/action/main.go
+RUN echo "nobody:x:65534:65534:Nobody:/:" > /etc_passwd
+
+FROM scratch
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /etc_passwd /etc/passwd
+COPY --from=builder --chown=65534:0 /src/app /app
+USER nobody
+ENTRYPOINT ["/app"]
