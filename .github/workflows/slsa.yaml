@@ -62,7 +62,7 @@ jobs:
     steps:
 
     - name: Checkout Code
-      uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f  # v3.4.0
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab  # v3.5.2
 
     - uses: slsa-framework/slsa-verifier/actions/installer@a43888265e1f6aae98c924538298944f2721dcf0  # v2.0.1
 
