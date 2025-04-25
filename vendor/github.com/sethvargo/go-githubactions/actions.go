@@ -21,16 +21,16 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 	"time"
-
-	"github.com/sethvargo/go-envconfig"
 )
 
 var (
@@ -459,44 +459,46 @@ type GetenvFunc func(key string) string
 //
 // See: https://docs.github.com/en/actions/learn-github-actions/environment-variables
 type GitHubContext struct {
-	Action           string `env:"GITHUB_ACTION"`
-	ActionPath       string `env:"GITHUB_ACTION_PATH"`
-	ActionRepository string `env:"GITHUB_ACTION_REPOSITORY"`
-	Actions          bool   `env:"GITHUB_ACTIONS"`
-	Actor            string `env:"GITHUB_ACTOR"`
-	APIURL           string `env:"GITHUB_API_URL,default=https://api.github.com"`
-	BaseRef          string `env:"GITHUB_BASE_REF"`
-	Env              string `env:"GITHUB_ENV"`
-	EventName        string `env:"GITHUB_EVENT_NAME"`
-	EventPath        string `env:"GITHUB_EVENT_PATH"`
-	GraphqlURL       string `env:"GITHUB_GRAPHQL_URL,default=https://api.github.com/graphql"`
-	HeadRef          string `env:"GITHUB_HEAD_REF"`
-	Job              string `env:"GITHUB_JOB"`
-	Path             string `env:"GITHUB_PATH"`
-	Ref              string `env:"GITHUB_REF"`
-	RefName          string `env:"GITHUB_REF_NAME"`
-	RefProtected     bool   `env:"GITHUB_REF_PROTECTED"`
-	RefType          string `env:"GITHUB_REF_TYPE"`
+	Action           string
+	ActionPath       string
+	ActionRepository string
+	Actions          bool
+	Actor            string
+	ActorID          string
+	APIURL           string
+	BaseRef          string
+	Env              string
+	EventName        string
+	EventPath        string
+	GraphqlURL       string
+	HeadRef          string
+	Job              string
+	Path             string
+	Ref              string
+	RefName          string
+	RefProtected     bool
+	RefType          string
 
 	// Repository is the owner and repository name. For example, octocat/Hello-World
 	// It is not recommended to use this field to acquire the repository name
 	// but to use the Repo method instead.
-	Repository string `env:"GITHUB_REPOSITORY"`
+	Repository string
 
 	// RepositoryOwner is the repository owner. For example, octocat
 	// It is not recommended to use this field to acquire the repository owner
 	// but to use the Repo method instead.
-	RepositoryOwner string `env:"GITHUB_REPOSITORY_OWNER"`
+	RepositoryOwner string
 
-	RetentionDays int64  `env:"GITHUB_RETENTION_DAYS"`
-	RunAttempt    int64  `env:"GITHUB_RUN_ATTEMPT"`
-	RunID         int64  `env:"GITHUB_RUN_ID"`
-	RunNumber     int64  `env:"GITHUB_RUN_NUMBER"`
-	ServerURL     string `env:"GITHUB_SERVER_URL,default=https://github.com"`
-	SHA           string `env:"GITHUB_SHA"`
-	StepSummary   string `env:"GITHUB_STEP_SUMMARY"`
-	Workflow      string `env:"GITHUB_WORKFLOW"`
-	Workspace     string `env:"GITHUB_WORKSPACE"`
+	RetentionDays   int64
+	RunAttempt      int64
+	RunID           int64
+	RunNumber       int64
+	ServerURL       string
+	SHA             string
+	StepSummary     string
+	TriggeringActor string
+	Workflow        string
+	Workspace       string
 
 	// Event is populated by parsing the file at EventPath, if it exists.
 	Event map[string]any
@@ -536,15 +538,136 @@ func (c *GitHubContext) Repo() (string, string) {
 	return ownerName, repoName
 }
 
+func parseBool(v string) (bool, error) {
+	if v == "" {
+		return false, nil
+	}
+	return strconv.ParseBool(v)
+}
+
+func parseInt(v string) (int64, error) {
+	if v == "" {
+		return 0, nil
+	}
+	return strconv.ParseInt(v, 10, 64)
+}
+
 // Context returns the context of current action with the payload object
 // that triggered the workflow
 func (c *Action) Context() (*GitHubContext, error) {
-	ctx := context.Background()
-	lookuper := &wrappedLookuper{f: c.getenv}
+	var merr error
+	githubContext := &GitHubContext{
+		APIURL:     "https://api.github.com",
+		GraphqlURL: "https://api.github.com/graphql",
+		ServerURL:  "https://github.com",
+	}
 
-	var githubContext GitHubContext
-	if err := envconfig.ProcessWith(ctx, &githubContext, lookuper); err != nil {
-		return nil, fmt.Errorf("could not process github context variables: %w", err)
+	if v := c.getenv("GITHUB_ACTION"); v != "" {
+		githubContext.Action = v
+	}
+	if v := c.getenv("GITHUB_ACTION_PATH"); v != "" {
+		githubContext.ActionPath = v
+	}
+	if v := c.getenv("GITHUB_ACTION_REPOSITORY"); v != "" {
+		githubContext.ActionRepository = v
+	}
+	if v, err := parseBool(c.getenv("GITHUB_ACTIONS")); err == nil {
+		githubContext.Actions = v
+	} else {
+		merr = errors.Join(merr, err)
+	}
+	if v := c.getenv("GITHUB_ACTOR"); v != "" {
+		githubContext.Actor = v
+	}
+	if v := c.getenv("GITHUB_ACTOR_ID"); v != "" {
+		githubContext.ActorID = v
+	}
+	if v := c.getenv("GITHUB_API_URL"); v != "" {
+		githubContext.APIURL = v
+	}
+	if v := c.getenv("GITHUB_BASE_REF"); v != "" {
+		githubContext.BaseRef = v
+	}
+	if v := c.getenv("GITHUB_ENV"); v != "" {
+		githubContext.Env = v
+	}
+	if v := c.getenv("GITHUB_EVENT_NAME"); v != "" {
+		githubContext.EventName = v
+	}
+	if v := c.getenv("GITHUB_EVENT_PATH"); v != "" {
+		githubContext.EventPath = v
+	}
+	if v := c.getenv("GITHUB_GRAPHQL_URL"); v != "" {
+		githubContext.GraphqlURL = v
+	}
+	if v := c.getenv("GITHUB_HEAD_REF"); v != "" {
+		githubContext.HeadRef = v
+	}
+	if v := c.getenv("GITHUB_JOB"); v != "" {
+		githubContext.Job = v
+	}
+	if v := c.getenv("GITHUB_PATH"); v != "" {
+		githubContext.Path = v
+	}
+	if v := c.getenv("GITHUB_REF"); v != "" {
+		githubContext.Ref = v
+	}
+	if v := c.getenv("GITHUB_REF_NAME"); v != "" {
+		githubContext.RefName = v
+	}
+	if v, err := parseBool(c.getenv("GITHUB_REF_PROTECTED")); err == nil {
+		githubContext.RefProtected = v
+	} else {
+		merr = errors.Join(merr, err)
+	}
+	if v := c.getenv("GITHUB_REF_TYPE"); v != "" {
+		githubContext.RefType = v
+	}
+
+	if v := c.getenv("GITHUB_REPOSITORY"); v != "" {
+		githubContext.Repository = v
+	}
+	if v := c.getenv("GITHUB_REPOSITORY_OWNER"); v != "" {
+		githubContext.RepositoryOwner = v
+	}
+
+	if v, err := parseInt(c.getenv("GITHUB_RETENTION_DAYS")); err == nil {
+		githubContext.RetentionDays = v
+	} else {
+		merr = errors.Join(merr, err)
+	}
+	if v, err := parseInt(c.getenv("GITHUB_RUN_ATTEMPT")); err == nil {
+		githubContext.RunAttempt = v
+	} else {
+		merr = errors.Join(merr, err)
+	}
+	if v, err := parseInt(c.getenv("GITHUB_RUN_ID")); err == nil {
+		githubContext.RunID = v
+	} else {
+		merr = errors.Join(merr, err)
+	}
+	if v, err := parseInt(c.getenv("GITHUB_RUN_NUMBER")); err == nil {
+		githubContext.RunNumber = v
+	} else {
+		merr = errors.Join(merr, err)
+	}
+	if v := c.getenv("GITHUB_SERVER_URL"); v != "" {
+		githubContext.ServerURL = v
+	}
+	if v := c.getenv("GITHUB_SHA"); v != "" {
+		githubContext.SHA = v
+	}
+	if v := c.getenv("GITHUB_STEP_SUMMARY"); v != "" {
+		githubContext.StepSummary = v
+	}
+	if v := c.getenv("GITHUB_TRIGGERING_ACTOR"); v != "" {
+		githubContext.TriggeringActor = v
+	}
+	if v := c.getenv("GITHUB_WORKFLOW"); v != "" {
+		githubContext.Workflow = v
+	}
+	if v := c.getenv("GITHUB_WORKSPACE"); v != "" {
+		githubContext.Workspace = v
 	}
 
 	if githubContext.EventPath != "" {
@@ -559,18 +682,5 @@ func (c *Action) Context() (*GitHubContext, error) {
 		}
 	}
 
-	return &githubContext, nil
-}
-
-// wrappedLookuper creates a lookuper that wraps a given getenv func.
-type wrappedLookuper struct {
-	f GetenvFunc
-}
-
-// Lookup implements a custom lookuper.
-func (w *wrappedLookuper) Lookup(key string) (string, bool) {
-	if v := w.f(key); v != "" {
-		return v, true
-	}
-	return "", false
+	return githubContext, merr
 }
